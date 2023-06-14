@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Библиотека jQuery</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
+
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/humanity/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+
+
+    <style type="text/css">
+        .droppable {
+            font-size: large;
+            border: medium solid black;
+            padding: 4px;
+            width: 150px;
+            text-align: center;
+            background-color: lightgray;
+            margin-bottom: 10px;
+        }
+
+        .droppable {
+            margin-right: 5px;
+            height: 50px;
+            width: 120px
+        }
+
+        div span {
+            position: relative;
+            top: 25%
+        }
+
+        .drop.active {
+            border: medium solid green
+        }
+
+        .drop.hover {
+            background-color: lightgreen
+        }
+
+        .drop,
+        .draggable {
+           /* padding: 25px 25px;*/
+            font-size: 20pt;
+            margin: 10px;
+            width: 90px;
+            background-color: lightgray;
+            height: 90px;
+            display: inline-block;
+            border: 2px solid black
+        }
+
+      /*  .parent_drop {
+            margin-top: 30px;
+            margin-left: 50px;
+        }*/
+    </style>
+
+
+    <script type="text/javascript">
+        $(function () {
+            let arr_alphabet = ['а', 'е', 'и', 'о', 'у', 'э', 'ю', 'я'];
+            let draggedtext1, draggedtext2, draggedtext3, draggedtext4;
+            $('#btn_get_result, #btn_mix').button();
+
+            $('#btn_get_result').click(function () {
+
+                last = arr_alphabet.indexOf(draggedtext1);
+                last = arr_alphabet.indexOf((draggedtext2), last);
+                if (last != -1) {
+                    last = arr_alphabet.indexOf(draggedtext3, last);
+                    if (last != -1) {
+                        last = arr_alphabet.indexOf(draggedtext4, last);
+                        if (last != -1) $('#text_result').text("Верно");
+                    }
+                }
+                if (last == -1) $('#text_result').text("Неверно");
+                $("#dialog-form").dialog("open");
+            });
+
+            $("#btn_mix").click(function () {
+                change_drop()
+            })
+
+            $('div.draggable').draggable({
+                snap: ".drop",
+                snapMode: "both",
+                snapTolerance: 0
+            });
+
+
+
+            $('#drop1').droppable({
+                snap: true,
+                greedy: true,
+                activeClass: "active",
+                hoverClass: "hover",
+                drop: function (event, ui) {
+                    draggedtext1 = ui.draggable.text();
+                }
+            });
+            $('#drop2').droppable({
+                activeClass: "active",
+                hoverClass: "hover",
+                drop: function (event, ui) {
+                    draggedtext2 = ui.draggable.text();
+                }
+            });
+            $('#drop3').droppable({
+                activeClass: "active",
+                hoverClass: "hover",
+                drop: function (event, ui) {
+                    draggedtext3 = ui.draggable.text();
+                }
+            });
+            $('#drop4').droppable({
+                activeClass: "active",
+                hoverClass: "hover",
+                drop: function (event, ui) {
+                    draggedtext4 = ui.draggable.text();
+                }
+            });
+
+            function randomInteger(min, max) {
+                // случайное число от min до (max+1)
+                let rand = min + Math.random() * (max + 1 - min);
+                return Math.floor(rand);
+            }
+
+
+            function change_drop() {
+                random = randomInteger(0, 9)
+                $('#draggable1').text(arr_alphabet[random]);
+                random = randomInteger(0, 9)
+                $('#draggable2').text(arr_alphabet[random]);
+                random = randomInteger(0, 9)
+                $('#draggable3').text(arr_alphabet[random]);
+                random = randomInteger(0, 9)
+                $('#draggable4').text(arr_alphabet[random]);
+            }
+            dialog = $("#dialog-form").dialog({
+                autoOpen: false,
+                height: 300,
+                width: 500,
+                modal: false,
+                resizable: false,
+                buttons: {
+                    "ОК": function () {
+                        dialog.dialog("close");
+                    }
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div class="parent_drop">
+        <div class="drop" id="drop1">
+            <p></p>
+        </div>
+        <div class="drop" id="drop2"></div>
+        <div class="drop" id="drop3"></div>
+        <div class="drop" id="drop4"></div>
+
+    </div>
+
+    <div class="parent_drop">
+        <!-- Перетаскиваемые элементы -->
+        <div class="draggable" id="draggable1">
+            <p></p>
+        </div>
+        <div class="draggable" id="draggable2"></div>
+        <div class="draggable" id="draggable3"></div>
+        <div class="draggable" id="draggable4"></div>
+    </div>
+    <button id="btn_get_result">Результат</button>
+    <button id="btn_mix">Перемешать</button>
+    <div id="dialog-form" title="Результат">
+        <p>Ваш Результат:</p><br>
+        <p id="text_result"></p>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,172 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="none" />
+  <title>Библиотека jQuery</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
+
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/humanity/jquery-ui.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+
+  <style type="text/css">
+    label {
+      margin-right: 5px;
+      margin-left: 20px;
+      margin-bottom: 12px
+    }
+
+    input {
+      width: 80px;
+      margin-top: 12px;
+      text-align: left
+    }
+
+    #dpcontainer * {
+      vertical-align: middle
+    }
+
+    .result_div {
+      margin: 0 0 0 auto;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="dialog-form" title="Вычисление интеграла">
+    <label for="min_form1">Мин. знач: </label><input type="text" id="min_form1" />
+    <label for="max_form1">Макс. знач: </label><input id="max_form1" /><br><br>
+    <div id="slider"></div>
+    <div class="inputDiv">
+      <label for="slideVal">N: </label>
+      <input id="slideVal" />
+    </div>
+    <div class="result_div">
+      <label for="result_input">Результат: </label><input id="result_input" />
+    </div>
+  </div>
+
+  <button id="open_dialog">Вычислить</button>
+
+  <div id="dialog-form-2" title="">
+    <div id="rangeslider"></div>
+    <div class="inputDiv">
+      <label for="rangeMin">Мин. значение: </label><input type="text" id="rangeMin"><br>
+      <label for="rangeMax">Макс. значение: </label><input id="rangeMax" />
+    </div>
+  </div>
+
+
+
+  <script type="text/javascript">
+    $(function () {
+
+      $('#slider').slider({
+        value: 100,
+        create: setInputsFromSlider,
+        slide: setInputsFromSlider,
+        stop: setInputsFromSlider
+      })
+
+      function setInputsFromSlider() {
+        $('#slideVal').val($('#slider').slider("value"));
+      }
+
+      $('#rangeslider').slider({
+        values: [0, 1],
+        range: true,
+        create: setInputsFrom2Slider,
+        slide: setInputsFrom2Slider,
+        stop: setInputsFrom2Slider
+      })
+
+      function setInputsFrom2Slider() {
+        $('#rangeMin').val($('#rangeslider').slider("values", 0));
+        $('#rangeMax').val($('#rangeslider').slider("values", 1));
+      }
+
+      $('input').change(function (e) {
+        switch (this.id) {
+          case "rangeMin":
+          case "rangeMax":
+            var index = (this.id == "rangeMax") ? 1 : 0;
+            $('#rangeslider').slider("values", index, $(this).val())
+            break;
+          case "slideVal":
+            $('#slider').slider("value", $(this).val())
+            break;
+        }
+      })
+
+
+      dialog = $("#dialog-form-2").dialog({
+        autoOpen: false,
+        height: 300,
+        width: 500,
+        modal: true,
+        resizable: false,
+        buttons: {
+          "OK": ok_form2,
+          "Cancel": function () {
+            $("#dialog-form-2").dialog("close");
+          }
+        }
+      }),
+
+
+        dialog = $("#dialog-form").dialog({
+          autoOpen: false,
+          height: 300,
+          width: 500,
+          modal: false,
+          resizable: false,
+          buttons: {
+            "Граничные условия": modal_border_con,
+            "Пуск": go,
+            "Выход": function () {
+              dialog.dialog("close");
+            }
+          }
+        }),
+
+        $("#open_dialog").button().on("click", function () {
+          dialog.dialog("open");
+        });
+
+
+      function modal_border_con() {
+        $("#dialog-form-2").dialog("open");
+      }
+
+      /*  Вычисление интеграла  */
+      function go() {
+        let n, h, xm = 0, s;
+        n = $('#slideVal').val();
+        h = (max - min) / n;
+        s = 0;
+
+        for (let i = 0; i < n; i++) {
+          xm = h * i;
+          s = s + h * (1 + xm);
+        }
+
+        $('#result_input').val(s);
+      }
+
+      let min, max;
+      function ok_form2() {
+
+        min = $('#rangeMin').val();
+        max = $('#rangeMax').val();
+
+        $('#min_form1').val(min);
+        $('#max_form1').val(max)
+
+        $("#dialog-form-2").dialog("close");
+      }
+    });
+
+  </script>
+</body>
+
+</html>

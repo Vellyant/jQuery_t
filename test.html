@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Библиотека jQuery</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
+
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/humanity/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+    <style>
+        input,
+        label {
+            margin-top: 10px !important;
+            margin-bottom: 10px !important;
+        }
+
+        h1,
+        p {
+            text-align: center;
+        }
+    </style>
+    <script>
+        $(function () {
+            $("#get_result").button();
+            $("input").checkboxradio();
+            $("fieldset").controlgroup({
+                direction: "vertical"
+            });
+
+            $("#tabs").tabs();
+
+            $("#get_result").on("click", function (event) {
+                correct = result();
+                $('#text_result').text(correct + "/5");
+                $("#dialog-form").dialog("open");
+            });
+
+            dialog = $("#dialog-form").dialog({
+                autoOpen: false,
+                height: 300,
+                width: 500,
+                modal: false,
+                resizable: false,
+                buttons: {
+                    "ОК": function () {
+                        dialog.dialog("close");
+                    }
+                }
+            });
+
+            function result() {
+                let correct_question = 0;
+                let arr_correct = [2, 1, 2, 2, 3];
+                for (i = 0; i < 5; i++) {
+                    let tempval = $('input[name="radio-' + (i + 1) + '"]:checked').val();
+                    if (arr_correct[i] == tempval)
+                        correct_question++;
+
+                    // console.log(arr_correct[i]+" = "+tempval);
+                }
+                return correct_question;
+
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <h1>Тест</h1>
+
+    <div id="tabs">
+        <ul>
+            <li><a href="#tabs-1">Вопрос 1</a></li>
+            <li><a href="#tabs-2">Вопрос 2</a></li>
+            <li><a href="#tabs-3">Вопрос 3</a></li>
+            <li><a href="#tabs-4">Вопрос 4</a></li>
+            <li><a href="#tabs-5">Вопрос 5</a></li>
+        </ul>
+        <div id="tabs-1">
+            <fieldset>
+                <legend>В каком случае Вы совершите вынужденную остановку?</legend>
+                <label for="radio-1">Остановившись непосредственно перед пешеходным переходом, чтобы уступить дорогу
+                    пешеходу</label>
+                <input type="radio" name="radio-1" id="radio-1" value="1">
+                <label for="radio-2">ВЕРНЫЙ Остановившись на проезжей части из-за технической неисправности
+                    транспортного средства</label>
+                <input type="radio" name="radio-1" id="radio-2" value="2">
+                <label for="radio-3">В обоих перечисленных случаях</label>
+                <input type="radio" name="radio-1" id="radio-3" value="3">
+            </fieldset>
+
+        </div>
+        <div id="tabs-2">
+
+            <img src="2.jpg" alt=""><br>
+            <fieldset>
+                <legend>Разрешен ли Вам съезд на дорогу с грунтовым покрытием?</legend>
+
+
+                <label for="radio-12">ВЕРНЫЙ Разрешен</label>
+                <input type="radio" name="radio-2" id="radio-12" value="1">
+                <label for="radio-22">Разрешен только при технической неисправности транспортного средства</label>
+                <input type="radio" name="radio-2" id="radio-22" value="2">
+                <label for="radio-32">Запрещен</label>
+                <input type="radio" name="radio-2" id="radio-32" value="3">
+            </fieldset>
+        </div>
+        <div id="tabs-3">
+
+            <fieldset>
+                <legend>Что означает мигание зеленого сигнала светофора?</legend>
+
+
+                <label for="radio-13">Предупреждает о неисправности светофора.
+                </label>
+                <input type="radio" name="radio-3" id="radio-13" value="1">
+                <label for="radio-23">ВЕРНЫЙ Разрешает движение и информирует о том, что вскоре будет включен
+                    запрещающий сигнал.</label>
+                <input type="radio" name="radio-3" id="radio-23" value="2">
+                <label for="radio-33">Запрещает дальнейшее движение.</label>
+                <input type="radio" name="radio-3" id="radio-33" value="3">
+            </fieldset>
+
+
+        </div>
+        <div id="tabs-4">
+            <fieldset>
+                <legend>Что понимается под временем реакции водителя?</legend>
+
+                <label for="radio-14">Время с момента обнаружения водителем опасности до полной остановки транспортного
+                    средства.
+                </label>
+                <input type="radio" name="radio-4" id="radio-14" value="1">
+                <label for="radio-24"> ВЕРНЫЙ Время с момента обнаружения водителем опасности до начала принятия мер по
+                    ее
+                    избежанию.
+                </label>
+                <input type="radio" name="radio-4" id="radio-24" value="2">
+                <label for="radio-34">Время, необходимое для переноса ноги с педали управления подачей топлива на педаль
+                    тормоза.
+                </label>
+                <input type="radio" name="radio-4" id="radio-34" value="3">
+            </fieldset>
+
+
+        </div>
+        <div id="tabs-5">
+            <fieldset>
+                <legend>Разрешено ли перевозить людей в прицепе-даче?</legend>
+                <label for="radio-15">Разрешено
+                </label>
+                <input type="radio" name="radio-5" id="radio-15" value="1">
+                <label for="radio-25">Разрешено при наличии мест для сидения пассажиров</label>
+                <input type="radio" name="radio-5" id="radio-25" value="2">
+                <label for="radio-35">ВЕРНЫЙ Запрещено.</label>
+                <input type="radio" name="radio-5" id="radio-35" value="3">
+            </fieldset>
+
+
+        </div>
+    </div>
+    <br><br>
+    <button id="get_result">Результат опроса</button>
+
+    <div id="dialog-form" title="Результат">
+        <p>Количество верных ответов:</p><br>
+        <p id="text_result"></p>
+    </div>
+</body>
+
+</html>
